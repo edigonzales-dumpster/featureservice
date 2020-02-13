@@ -1,0 +1,22 @@
+app:
+  datasources:
+    - id: pubdb 
+      url: jdbc:postgresql://localhost:54321/pub
+      user: gretl
+      password: gretl
+    - id: oerebdb
+      url: jdbc:postgresql://localhost:54321/oereb
+      user: gretl
+      password: gretl
+  datasets:
+    - name: ch.so.agi.gemeindegrenzen
+      title: Gemeindegrenzen
+      datasource: pubdb
+      schema: agi_hoheitsgrenzen_pub
+      table: hoheitsgrenzen_gemeindegrenze
+    - name: ch.so.arp.nutzungsplanung.grundnutzung_oereb
+      title: Nutzungsplanung Grundnutzung (Review)  
+      schema: stage
+      table: oerebwms_nutzungsplanung_grundnutzung_flaeche_v
+      
+  
