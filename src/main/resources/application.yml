@@ -1,7 +1,20 @@
 app:
   datasources:
+    - id: editdb 
+      url: jdbc:postgresql://localhost:54321/edit
+      user: gretl
+      password: gretl
+      datasets:
+        - name: ch.so.agi.av.fixpunkte
+          title: Fixpunkte LFP3
+          schema: agi_dm01avso24
+          table: aabbccc
+        - name: ch.so.agi.av.bodenbedeckung
+          title: Bodenbedeckung
+          schema: agi_dm01avso24
+          table: boflaechefoo          
     - id: pubdb 
-      url: jdbc:postgresql://localhost:54321/pub
+      url: jdbc:postgresql://localhost:54322/pub
       user: gretl
       password: gretl
     - id: oerebdb
