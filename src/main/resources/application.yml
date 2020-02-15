@@ -3,33 +3,26 @@ app:
     - id: editdb 
       url: jdbc:postgresql://localhost:54321/edit
       user: gretl
-      password: gretl
-      datasets:
-        - name: ch.so.agi.av.fixpunkte
-          title: Fixpunkte LFP3
-          schema: agi_dm01avso24
-          table: aabbccc
-        - name: ch.so.agi.av.bodenbedeckung
-          title: Bodenbedeckung
-          schema: agi_dm01avso24
-          table: boflaechefoo          
+      password: gretl       
     - id: pubdb 
       url: jdbc:postgresql://localhost:54322/pub
       user: gretl
       password: gretl
+      datasets:      
+        - name: ch.so.agi.av.nachfuehrungskreise
+          title: Nachführungskreise (amtliche Vermessung)
+          schema: agi_av_gb_admin_einteilungen_pub
+          table: nachfuehrngskrise_gemeinde
+        - name: ch.so.agi.av.grundbuchkreise
+          title: Grundbuchkreise
+          schema: agi_av_gb_admin_einteilungen_pub
+          table: grundbuchkreise_grundbuchkreis                            
     - id: oerebdb
       url: jdbc:postgresql://localhost:54321/oereb
       user: gretl
       password: gretl
-  datasets:
-    - name: ch.so.agi.gemeindegrenzen
-      title: Gemeindegrenzen
-      datasource: pubdb
-      schema: agi_hoheitsgrenzen_pub
-      table: hoheitsgrenzen_gemeindegrenze
-    - name: ch.so.arp.nutzungsplanung.grundnutzung_oereb
-      title: Nutzungsplanung Grundnutzung (Review)  
-      schema: stage
-      table: oerebwms_nutzungsplanung_grundnutzung_flaeche_v
-      
-  
+      datasets:
+        - name: ch.so.arp.nutzungsplanung.grundnutzung.oereb
+          title: Nutzungsplanung Grundnutzung (ÖREB)
+          schema: live
+          table: oerebwms_nutzungsplanung_grundnutzung_flaeche

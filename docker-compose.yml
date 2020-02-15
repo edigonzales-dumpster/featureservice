@@ -34,3 +34,22 @@ services:
       - "54322:5432"
     volumes:
       - ${PWD}/development_dbs/setup.sql:/pgconf/setup.sql
+  oereb-db:
+    hostname: primary-oereb
+    image: sogis/oereb-db:latest
+    environment:
+      PG_DATABASE: oereb
+      PG_LOCALE: de_CH.UTF-8
+      PG_PRIMARY_PORT: 5432
+      PG_MODE: primary
+      PG_USER: admin
+      PG_PASSWORD: admin
+      PG_PRIMARY_USER: repl
+      PG_PRIMARY_PASSWORD: repl
+      PG_ROOT_PASSWORD: secret
+      PG_WRITE_USER: gretl
+      PG_WRITE_PASSWORD: gretl
+      PG_READ_USER: ogc_server
+      PG_READ_PASSWORD: ogc_server
+    ports:
+      - "54323:5432"

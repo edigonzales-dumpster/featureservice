@@ -1,0 +1,90 @@
+import ch.so.agi.gretl.tasks.*
+import java.nio.file.Paths
+import de.undercouch.gradle.tasks.download.Download
+
+defaultTasks "dbImport"
+
+def pathToTempFolder = System.getProperty("java.io.tmpdir")
+def iliModelGrundbuchKreise = "SO_AGI_AV_GB_Administrative_Einteilungen_Publikation_20180822"
+ 
+def landRegisterSubunitBaseUrl = "https://s3.eu-central-1.amazonaws.com/ch.so.agi.av-gb-administrative-einteilung/"
+def landRegisterSubunitDataSet = "ch.so.agi.av-gb-administrative-einteilung"
+
+def dbSchema = "agi_av_gb_admin_einteilungen_pub"
+
+task download(type: Download) {
+    description = "Download GB-Kreise."
+    src landRegisterSubunitBaseUrl + landRegisterSubunitDataSet + ".xtf"
+    dest pathToTempFolder
+    overwrite true
+
+    doLast {
+        println "File downloaded to: " + pathToTempFolder
+    }
+}
+
+task createSchema(type: Ili2pgImportSchema, dependsOn: download) {
+    description = "Schema erstellen."
+    database = [dbUriPub, "admin", "admin"]
+    dbschema = dbSchema
+    models = iliModelGrundbuchKreise
+    createFk = true
+    createFkIdx = true
+    createGeomIdx = true
+    nameByTopic = true
+    defaultSrsCode = 2056
+    postScript = file("./postscript.sql")
+}
+
+/*
+task grant(type: SqlExecutor, dependsOn: createSchema) {
+    description = "Permissions setzen."
+    database = [dbUriPub, "admin", "admin"]
+    sqlFiles = ['postscript.sql']
+
+}
+*/
+task dbImport(type: Ili2pgImport, dependsOn: createSchema) {
+    description = "Import GB-Kreise in die Datenbank."
+    database = [dbUriPub, dbUserPub, dbPwdPub]
+    dbschema = dbSchema
+    models = iliModelGrundbuchKreise
+    dataFile = file(Paths.get(pathToTempFolder.toString(), landRegisterSubunitDataSet + ".xtf"))
+    disableValidation = true
+
+    doLast {
+        println "Data imported into schema $dbSchema of db $dbUriPub"
+    }
+}
+
+
+
+
+/*
+dbSchemas.each { dbSchema ->
+    task "import_$dbSchema"(type: Ili2pgReplace, dependsOn: download) {
+        description = "Import GB-Kreise in die Datenbank."
+        database = [dbUriOereb, dbUserOereb, dbPwdOereb]
+        dbschema = dbSchema
+        models = iliModelGrundbuchKreise
+        dataFile = file(Paths.get(pathToTempFolder.toString(), landRegisterSubunitDataSet + ".xtf"))
+        dataset = landRegisterSubunitDataSet
+        disableValidation = false
+
+        doLast {
+            println "Data imported into schema $dbSchema of db $dbUriOereb"
+        }
+    }
+}
+
+task dbImport() {
+    description = "Aggregation task."
+    dependsOn {
+        tasks.findAll { task -> task.name.startsWith('import_') }
+    }    
+    
+    doLast {
+        println "Data import into db finished."
+    }
+}
+*/

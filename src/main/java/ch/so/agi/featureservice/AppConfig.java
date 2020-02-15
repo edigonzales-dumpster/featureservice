@@ -11,12 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = "app")
-public class AppProperties {
+public class AppConfig {
     
     private List<Datasource> datasources = new ArrayList<Datasource>();
-    
-    //private List<Dataset> datasets = new ArrayList<Dataset>();
-    
+        
     public List<Datasource> getDatasources() {
         return datasources;
     }
@@ -24,14 +22,6 @@ public class AppProperties {
     public void setDatasources(List<Datasource> datasources) {
         this.datasources = datasources;
     }
-
-//    public List<Dataset> getDatasets() {
-//        return datasets;
-//    }
-//
-//    public void setDatasets(List<Dataset> datasets) {
-//        this.datasets = datasets;
-//    }
 
     public static class Dataset {
         private String name;
