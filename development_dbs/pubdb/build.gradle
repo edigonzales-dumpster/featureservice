@@ -32,6 +32,7 @@ task createSchema(type: Ili2pgImportSchema, dependsOn: download) {
     createFkIdx = true
     createGeomIdx = true
     nameByTopic = true
+    strokeArcs = true
     defaultSrsCode = 2056
     postScript = file("./postscript.sql")
 }

@@ -5,12 +5,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import ch.so.agi.featureservice.AppConfig.Dataset;
+import ch.so.agi.featureservice.AppConfig.Datasource;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 //import com.zaxxer.hikari.HikariDataSource;
 
@@ -27,7 +41,7 @@ public class MainController {
     @Autowired
     private DataSourceConfig dataSourceConfig;
     
-    @GetMapping("/")
+    @GetMapping("/foo")
     public ResponseEntity<?> getAppDetails() throws SQLException {
 //        Map<String, HashMap<String,String>> appDetails = new HashMap<>();
 
@@ -43,33 +57,29 @@ public class MainController {
 
             System.out.println("Hallo Welt.");
         }
-        
-        
-//        log.info(config.getDatasources().toString());
-//        log.info(config.getDatasets().toString());
-        
-//        log.info(dataSourceConfig.getDataSources().get("test1").toString());
-//        
-//        try (Connection conn = dataSourceConfig.getDataSources().get("test1").getConnection()) {
-//            Statement stmt = conn.createStatement();  
-//
-//            System.out.println("Hallo Welt.");
-//        }
-       
-//        ResultSet rs = stmt.executeQuery("select * from public.spatial_ref_sys");  
-//        while(rs.next()) {
-//        	//log.info(rs.getString(1));
-//        }
-
-        
-//        HikariDataSource hds1 = (HikariDataSource) dataSourceConfig.getDataSources().get("test1");
-//        System.out.println(hds1.getMaximumPoolSize());
-//        
-//        HikariDataSource hds2 = (HikariDataSource) dataSourceConfig.getDataSources().get("test1");
-//        System.out.println(hds2.getMaximumPoolSize());
-
-        
-        
         return ResponseEntity.ok(config.getDatasources().toString());
+    }
+    
+    @GetMapping("/")
+    public ResponseEntity<?> landingPage(@RequestParam(value="format", required=false, defaultValue="html") String format) {
+
+        return ResponseEntity.ok("Landing page. Format="+format);
+    }
+    
+    @Operation(summary = "Find Contacts by name", description = "Name search by %name% format", tags = { "contact" })
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "successful operation") })  
+    @GetMapping("/collections") 
+    public ResponseEntity<?> collections(@RequestParam(value="format", required=false, defaultValue="html") String format) {
+        
+        List<Dataset> datasets = config.getDatasources()
+                .stream()
+                .filter(ds -> ds.getDatasets() != null)
+                .flatMap(ds -> ds.getDatasets().stream())
+                .collect(Collectors.toList());
+            
+
+
+        return ResponseEntity.ok("Collections. Format="+format + " - " + datasets.toString());
     }
 }
