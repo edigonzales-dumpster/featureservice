@@ -63,6 +63,8 @@ public class MainController {
     @GetMapping("/")
     public ResponseEntity<?> landingPage(@RequestParam(value="format", required=false, defaultValue="html") String format) {
 
+        // redirect html to collections html
+        
         return ResponseEntity.ok("Landing page. Format="+format);
     }
     
