@@ -1,7 +1,7 @@
 plugins {
-	id 'org.springframework.boot' version '2.3.0.M1'
-	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
-	id 'java'
+    id 'org.springframework.boot' version '2.3.0.M1'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
 }
 
 group = 'ch.so.agi.featureservice'
@@ -23,7 +23,7 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation ('org.springframework.boot:spring-boot-starter-jdbc') {
-		exclude group: 'com.zaxxer', module: 'HikariCP'
+            exclude group: 'com.zaxxer', module: 'HikariCP'
 	}
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//implementation 'com.zaxxer:HikariCP:3.4.2'
@@ -32,10 +32,10 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 }
 
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

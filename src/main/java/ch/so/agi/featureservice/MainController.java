@@ -70,7 +70,7 @@ public class MainController {
     
     @Operation(summary = "Find Contacts by name", description = "Name search by %name% format", tags = { "contact" })
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "successful operation") })  
+    @ApiResponse(responseCode = "200", description = "successful operation") })  
     @GetMapping("/collections") 
     public ResponseEntity<?> collections(@RequestParam(value="format", required=false, defaultValue="html") String format) {
         
